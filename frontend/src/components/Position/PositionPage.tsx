@@ -69,7 +69,9 @@ const PositionPage: React.FC = () => {
             return;
         }
 
-        const snapshot: CandidateItem[] = [...candidates];
+        const originalStep = candidates.find(
+            (c) => c.applicationId === applicationId
+        )?.currentInterviewStep;
 
         setCandidates((prev) =>
             prev.map((c) =>
@@ -82,7 +84,13 @@ const PositionPage: React.FC = () => {
         try {
             await updateCandidateStep(candidateId, applicationId, targetStepId);
         } catch {
-            setCandidates(snapshot);
+            setCandidates((prev) =>
+                prev.map((c) =>
+                    c.applicationId === applicationId && originalStep !== undefined
+                        ? { ...c, currentInterviewStep: originalStep }
+                        : c
+                )
+            );
             setMoveError('No se pudo mover el candidato. El cambio fue revertido.');
             setTimeout(() => setMoveError(null), 4000);
         }

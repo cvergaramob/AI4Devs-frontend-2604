@@ -42,7 +42,7 @@ const KanbanBoard: React.FC<Props> = ({ interviewSteps, candidates, onCandidateM
 
     const handleDragEnd = useCallback((event: DragEndEvent): void => {
         const { active, over } = event;
-        if (!over || active.id === over.id) {
+        if (!over) {
             return;
         }
 

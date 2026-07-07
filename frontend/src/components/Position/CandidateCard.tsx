@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
 import { CandidateItem } from '../../types/position';
 
 type Props = {
@@ -33,15 +34,21 @@ const ScoreDots: React.FC<{ score: number | null }> = ({ score }) => {
 };
 
 const CandidateCard: React.FC<Props> = ({ candidate }) => {
-    const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: candidate.applicationId,
     });
+
+    const style: React.CSSProperties = {
+        opacity: isDragging ? 0.5 : 1,
+        cursor: 'grab',
+        transform: CSS.Translate.toString(transform),
+    };
 
     return (
         <Card
             ref={setNodeRef}
             className="mb-2"
-            style={{ opacity: isDragging ? 0.5 : 1, cursor: 'grab' }}
+            style={style}
             {...listeners}
             {...attributes}
             role="listitem"
